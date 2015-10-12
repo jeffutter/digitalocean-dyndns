@@ -32,6 +32,8 @@ type ipResponse struct {
 	IP string `json:"ip"`
 }
 
+var minversion string
+
 func main() {
 	if err := godotenv.Load(); err != nil {
 		fmt.Println(err.Error())
@@ -67,6 +69,7 @@ func main() {
 			Action:    updateIp(c),
 		},
 	}
+	app.Version = minversion
 	app.Run(os.Args)
 }
 

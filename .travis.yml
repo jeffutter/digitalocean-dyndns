@@ -7,7 +7,7 @@ env:
   - _GOOS=darwin _GOARCH=amd64
   - _GOOS=linux _GOARCH=arm
 script:
-  - GOOS=$_GOOS GOARCH=$_GOARCH go build -o digitalocean-dyndns cmd/digitalocean-dyndns/main.go
+  - GOOS=$_GOOS GOARCH=$_GOARCH go build -ldflags "-X main.minversion=${TRAVIS_TAG}" -o digitalocean-dyndns cmd/digitalocean-dyndns/main.go
   - if [ ! -z "$TRAVIS_TAG" ]; then zip -9 digitalocean-dyndns-$_GOOS-$_GOARCH.zip digitalocean-dyndns; fi
 notifications:
   email: true
