@@ -1,0 +1,23 @@
+language: go
+sudo: false
+go:
+  - 1.5
+env:
+  - _GOOS=linux _GOARCH=amd64
+  - _GOOS=darwin _GOARCH=amd64
+  - _GOOS=linux _GOARCH=arm
+script:
+  - GOOS=$_GOOS GOARCH=$_GOARCH go build -o digitalocean-dyndns cmd/digitalocean-dyndns/main.go
+  - if [ ! -z "$TRAVIS_TAG" ]; then zip -9 digitalocean-dyndns-$_GOOS-$_GOARCH.zip digitalocean-dyndns; fi
+notifications:
+  email: true
+deploy:
+  provider: releases
+  api_key:
+    secure: bZVTSUNN8HNRDY4aKiZXeQRQ76IV8T8RwKMYnYApgvnSRAEPS7qmkFVBpQBzxHN5NrhXiEpvrMhtT9lBGn2vjajEifBoOygVHOLyN3tgiubmwH7Hup0rd3oxITOed3cM0mHZ4uJDWGGPNNbXWKs+CPuZ6DkFdRkoAWE3HM4ADimm+3iSplpXodXuizxDPsBe8d2QbdVdjH5sBAs7rEz5BrMeJEJG0CD2zMp6uEK9CmBscvdRgem/AyARoyRsnEdrl8sZPaDGfk0j1wAoJ2oLQ+tGaps/yoROwYJgg+ZzDUxoL1NivVIK+aflxHKunjWjdlF71bUsnQzYwOZ8ePZA1oOcgDKJbesWYpgAsFIBfdCdA1WoPlIIkF+f5tt9Pza9alr5WUipmPKOEaDoubABvcm5TQ7gkvGHdfTbmcnXDIN3DeRO/vfZsCvxNjzdGJKq6USxiSUUDMig0SLZvrVIYWGGAkcSuPZowywwIu3ui4ysnR/iGc9FyCrYx25NDx5vcAGxXaAFg/WfKFaRLwVOEzEGbKbxMaUEZoWyHNfaeBv2GQvHRd6moL4GdP0459O/OYCyA+djZY6gPS2Y2lfHMfGaIOifZRoZ11ppnbpBScTWBKKq+NJYAyldFKgZJaSIvpoHaxuHoZRi0IjruQ1lnhnq0+zVvOJ63CJwNlglK2I=
+  skip_cleanup: true
+  file_glob: true
+  file: digitalocean-dyndns-*.zip
+  on:
+    repo: jeffutter/digitalocean-dyndns
+    tags: true
