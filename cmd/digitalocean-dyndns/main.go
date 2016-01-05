@@ -39,7 +39,7 @@ func main() {
 		fmt.Println(err.Error())
 	}
 
-	pat := os.Getenv("access_token")
+	pat := os.Getenv("ACCESS_TOKEN")
 	tokenSource := &TokenSource{
 		AccessToken: pat,
 	}
@@ -105,16 +105,16 @@ func getRecordId(context context) (int, error) {
 
 	opt := &godo.ListOptions{}
 
-	records, _, err := context.DoClient.Domains.Records(os.Getenv("domain"), opt)
+	records, _, err := context.DoClient.Domains.Records(os.Getenv("DOMAIN"), opt)
 	if err != nil {
 		return 0, err
 	}
 	for _, record := range records {
-		if record.Name == os.Getenv("host") {
+		if record.Name == os.Getenv("HOST") {
 			return record.ID, nil
 		}
 	}
-	return 0, errors.New(fmt.Sprintf("Host %s, not found on domain %s.", os.Getenv("host"), os.Getenv("domain")))
+	return 0, errors.New(fmt.Sprintf("Host %s, not found on domain %s.", os.Getenv("HOST"), os.Getenv("DOMAIN")))
 }
 
 func updateIp(context context) func(ctx *cli.Context) {
@@ -129,7 +129,7 @@ func updateIp(context context) func(ctx *cli.Context) {
 			Data: ip,
 		}
 
-		domainRecord, response, err := context.DoClient.Domains.EditRecord(os.Getenv("domain"), id, editRequest)
+		domainRecord, response, err := context.DoClient.Domains.EditRecord(os.Getenv("DOMAIN"), id, editRequest)
 		perr(err)
 		fmt.Printf("%+v\n", response)
 		fmt.Printf("%+v\n", domainRecord)
